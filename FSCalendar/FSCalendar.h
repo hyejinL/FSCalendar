@@ -402,6 +402,9 @@ IB_DESIGNABLE
  */
 @property (readonly, nonatomic) NSArray<NSDate *> *selectedDates;
 
+// use only not paging calendar
+@property (assign, nonatomic) BOOL hasFloatingWeekdayView;
+
 /**
  Reload the dates and appearance of the calendar.
  */

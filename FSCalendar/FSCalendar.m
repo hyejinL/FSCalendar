@@ -179,6 +179,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     
     _pagingEnabled = YES;
     _scrollEnabled = YES;
+    _hasFloatingWeekdayView = NO;
     _needsAdjustingViewFrame = YES;
     _needsRequestingBoundingDates = YES;
     _orientation = self.currentCalendarOrientation;
@@ -301,7 +302,8 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
         }
         
         self.calendarHeaderView.frame = CGRectMake(0, 0, self.fs_width, headerHeight);
-        self.calendarWeekdayView.frame = CGRectMake(0, self.calendarHeaderView.fs_bottom, self.contentView.fs_width, weekdayHeight);
+        CGFloat weekdayViewY = (self.floatingMode && self.hasFloatingWeekdayView) ? 0 : self.calendarHeaderView.fs_bottom;
+        self.calendarWeekdayView.frame = CGRectMake(0, weekdayViewY, self.contentView.fs_width, weekdayHeight);
 
         _deliver.frame = CGRectMake(self.calendarHeaderView.fs_left, self.calendarHeaderView.fs_top, self.calendarHeaderView.fs_width, headerHeight+weekdayHeight);
         _deliver.hidden = self.calendarHeaderView.hidden;
@@ -324,7 +326,12 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
             
             CGFloat contentHeight = _contentView.fs_height;
             _daysContainer.frame = CGRectMake(0, 0, self.fs_width, contentHeight);
-            _collectionView.frame = _daysContainer.bounds;
+
+            CGRect rect = _daysContainer.bounds;
+            if (_hasFloatingWeekdayView) {
+                rect.origin.y = _calendarWeekdayView.fs_bottom;
+            }
+            _collectionView.frame = rect;
             
         }
         _collectionView.fs_height = FSCalendarHalfFloor(_collectionView.fs_height);
@@ -860,6 +867,15 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     }
 }
 
+- (void)setHasFloatingWeekdayView:(BOOL)hasFloatingWeekdayView
+{
+    if (_hasFloatingWeekdayView != hasFloatingWeekdayView) {
+        _hasFloatingWeekdayView = hasFloatingWeekdayView;
+
+        [self invalidateLayout];
+    }
+}
+
 - (void)setOrientation:(FSCalendarOrientation)orientation
 {
     if (_orientation != orientation) {
@@ -1287,7 +1303,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
             self.calendarHeaderView = headerView;
             
         }
-        
+
         if (!_calendarWeekdayView) {
             FSCalendarWeekdayView *calendarWeekdayView = [[FSCalendarWeekdayView alloc] initWithFrame:CGRectZero];
             calendarWeekdayView.calendar = self;
@@ -1314,7 +1330,15 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
         
         [self.calendarHeaderView removeFromSuperview];
         [self.deliver removeFromSuperview];
-        [self.calendarWeekdayView removeFromSuperview];
+        if (!_hasFloatingWeekdayView) {
+            [self.calendarWeekdayView removeFromSuperview];
+            _calendarWeekdayView = nil;
+        } else if (!_calendarWeekdayView) {
+            FSCalendarWeekdayView *calendarWeekdayView = [[FSCalendarWeekdayView alloc] initWithFrame:CGRectZero];
+            calendarWeekdayView.calendar = self;
+            [_contentView addSubview:calendarWeekdayView];
+            _calendarWeekdayView = calendarWeekdayView;
+        }
         
         _collectionView.pagingEnabled = NO;
         _collectionViewLayout.scrollDirection = UICollectionViewScrollDirectionVertical;

@@ -59,10 +59,12 @@
         view.backgroundColor = FSCalendarStandardLineColor;
         [_contentView addSubview:view];
         self.bottomBorder = view;
-        
-        FSCalendarWeekdayView *weekdayView = [[FSCalendarWeekdayView alloc] init];
-        [self.contentView addSubview:weekdayView];
-        self.weekdayView = weekdayView;
+
+        if (!self.calendar.hasFloatingWeekdayView) {
+            FSCalendarWeekdayView *weekdayView = [[FSCalendarWeekdayView alloc] init];
+            [self.contentView addSubview:weekdayView];
+            self.weekdayView = weekdayView;
+        }
     }
     return self;
 }
@@ -73,8 +75,8 @@
     
     _contentView.frame = self.bounds;
 
-    CGFloat weekdayHeight = _calendar.preferredWeekdayHeight;
-    CGFloat weekdayMargin = self.calendar.appearance.weekdayBottomMargin;
+    CGFloat weekdayHeight = _calendar.hasFloatingWeekdayView ? 0 : _calendar.preferredWeekdayHeight;
+    CGFloat weekdayMargin = _calendar.appearance.weekdayBottomMargin;
     
     self.weekdayView.frame = CGRectMake(0, _contentView.fs_height-weekdayHeight-weekdayMargin, self.contentView.fs_width, weekdayHeight);
 
@@ -119,8 +121,13 @@
     _subtitleLabel.textColor = self.calendar.appearance.headerSubtitleColor;
     _subtitleLabel.textAlignment = NSTextAlignmentRight;
 
-    _bottomBorder.backgroundColor = self.calendar.appearance.headerSeparatorColor;
-    [self.weekdayView configureAppearance];
+    if (!self.calendar.hasFloatingWeekdayView) {
+        _bottomBorder.backgroundColor = self.calendar.appearance.headerSeparatorColor;
+        [self.weekdayView configureAppearance];
+    } else {
+        _bottomBorder.backgroundColor = [UIColor clearColor];
+        [self.weekdayView removeFromSuperview];
+    }
 }
 
 - (void)setMonth:(NSDate *)month

@@ -32,13 +32,16 @@ class DIYExampleViewController: UIViewController, FSCalendarDataSource, FSCalend
         let calendar = FSCalendar(frame: CGRect(x: 0, y: self.navigationController!.navigationBar.frame.maxY, width: view.frame.size.width, height: height))
         calendar.dataSource = self
         calendar.delegate = self
+        calendar.rowHeight = 40
         calendar.allowsMultipleSelection = true
         calendar.pagingEnabled = false
+        calendar.hasFloatingWeekdayView = true
         view.addSubview(calendar)
         self.calendar = calendar
 
         calendar.calendarHeaderView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.1)
-        calendar.calendarWeekdayView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.1)
+//        calendar.calendarWeekdayView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.1)
+        calendar.appearance.headerSeparatorColor = UIColor.lightGray.withAlphaComponent(0.1)
         calendar.appearance.weekdayWeekendTextColor = .red
         calendar.appearance.eventSelectionColor = UIColor.white
         calendar.appearance.eventOffset = CGPoint(x: 0, y: -7)
@@ -53,7 +56,7 @@ class DIYExampleViewController: UIViewController, FSCalendarDataSource, FSCalend
         calendar.register(DIYCalendarCell.self, forCellReuseIdentifier: "cell")
 //        calendar.clipsToBounds = true // Remove top/bottom line
 
-        calendar.headerHeight = 32
+        calendar.headerHeight = 40
         calendar.weekdayHeight = 69
         
         calendar.swipeToChooseGesture.isEnabled = true // Swipe-To-Choose

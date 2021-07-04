@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) NSPointerArray *weekdayPointers;
 @property (weak  , nonatomic) UIView *contentView;
+@property (weak  , nonatomic) UIView *borderView;
 @property (weak  , nonatomic) FSCalendar *calendar;
 
 - (void)commonInit;
@@ -54,6 +55,10 @@
         [self.contentView addSubview:weekdayLabel];
         [_weekdayPointers addPointer:(__bridge void * _Nullable)(weekdayLabel)];
     }
+
+    UIView *borderView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.contentView addSubview:borderView];
+    _borderView = borderView;
 }
 
 - (void)layoutSubviews
@@ -61,6 +66,12 @@
     [super layoutSubviews];
     
     self.contentView.frame = self.bounds;
+    if (self.calendar.hasFloatingWeekdayView) {
+        self.borderView.backgroundColor = self.calendar.appearance.headerSeparatorColor;
+        self.borderView.frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 1);
+    } else {
+        [self.borderView removeFromSuperview];
+    }
     
     // Position Calculation
     NSInteger count = self.weekdayPointers.count;
