@@ -77,7 +77,7 @@
     NSInteger count = self.weekdayPointers.count;
     size_t size = sizeof(CGFloat)*count;
     CGFloat *widths = malloc(size);
-    CGFloat contentWidth = self.contentView.fs_width;
+    CGFloat contentWidth = self.contentView.fs_width - 18 * 2;
     FSCalendarSliceCake(contentWidth, count, widths);
     
     BOOL opposite = NO;
@@ -85,7 +85,7 @@
         UIUserInterfaceLayoutDirection direction = [UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.calendar.semanticContentAttribute];
         opposite = (direction == UIUserInterfaceLayoutDirectionRightToLeft);
     }
-    CGFloat x = 0;
+    CGFloat x = 18;
     for (NSInteger i = 0; i < count; i++) {
         CGFloat width = widths[i];
         NSInteger labelIndex = opposite ? count-1-i : i;
