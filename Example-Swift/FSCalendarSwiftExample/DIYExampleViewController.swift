@@ -50,8 +50,11 @@ class DIYExampleViewController: UIViewController, FSCalendarDataSource, FSCalend
             calendar.appearance.headerTitleFont = .systemFont(ofSize: 23.0, weight: .bold)
         }
         calendar.appearance.headerSubtitleFont = .systemFont(ofSize: 12.0)
+        calendar.appearance.headerTitleSuffixFont = .systemFont(ofSize: 12.0)
+        calendar.appearance.headerSuffixString = "월"
         calendar.appearance.headerTitleColor = UIColor(red: 124/255, green: 137/255, blue: 173/255, alpha: 1.0)
         calendar.appearance.headerSubtitleColor = UIColor(red: 124/255, green: 137/255, blue: 173/255, alpha: 1.0)
+        calendar.appearance.headerTitleSuffixColor = UIColor(red: 124/255, green: 137/255, blue: 173/255, alpha: 1.0)
         calendar.today = nil // Hide the today circle
         calendar.register(DIYCalendarCell.self, forCellReuseIdentifier: "cell")
 //        calendar.clipsToBounds = true // Remove top/bottom line

@@ -30,6 +30,7 @@
     self = [super init];
     if (self) {
         _hasHeaderSubtitle = NO;
+        _scrollWhenSelected = YES;
 
         _titleFont = [UIFont systemFontOfSize:FSCalendarStandardTitleTextSize];
         _subtitleFont = [UIFont systemFontOfSize:FSCalendarStandardSubtitleTextSize];

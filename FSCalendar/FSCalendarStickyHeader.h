@@ -16,6 +16,7 @@
 
 @property (weak, nonatomic) UIView  *titleView;
 @property (weak, nonatomic) UILabel *titleLabel;
+@property (weak, nonatomic) UILabel *suffixLabel;
 @property (weak, nonatomic) UILabel *subtitleLabel;
 
 @property (strong, nonatomic) NSDate *month;

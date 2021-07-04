@@ -483,7 +483,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     } else {
         cell = [self cellForDate:selectedDate atMonthPosition:FSCalendarMonthPositionCurrent];
         NSIndexPath *indexPath = [collectionView indexPathForCell:cell];
-        if (indexPath) {
+        if (indexPath && self.appearance.scrollWhenSelected) {
             [collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
         }
     }

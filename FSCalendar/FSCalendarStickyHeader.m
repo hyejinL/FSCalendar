@@ -36,6 +36,7 @@
 
         UIView *titleView;
         UILabel *titleLabel;
+        UILabel *suffixLabel;
         UILabel *subtitleLabel;
 
         titleView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -48,6 +49,12 @@
         titleLabel.numberOfLines = 0;
         [titleView addSubview:titleLabel];
         self.titleLabel = titleLabel;
+
+        suffixLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        suffixLabel.textAlignment = NSTextAlignmentLeft;
+        suffixLabel.numberOfLines = 0;
+        [titleView addSubview:suffixLabel];
+        self.suffixLabel = suffixLabel;
 
         subtitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         subtitleLabel.textAlignment = NSTextAlignmentCenter;
@@ -88,7 +95,10 @@
 
     CGPoint titleHeaderOffset = self.calendar.appearance.headerTitleOffset;
     _titleView.frame = CGRectMake(titleHeaderOffset.x, titleHeaderOffset.y+(_contentView.fs_height / 2)-(titleHeight / 2)-(weekdayHeight / 2), _contentView.fs_width, titleHeight);
-    _titleLabel.frame = CGRectMake(self.calendar.appearance.headerTitleLeftMargin, 0, _contentView.fs_width / 2 - self.calendar.appearance.headerTitleLeftMargin, titleHeight);
+
+    CGFloat titleWidth = [_titleLabel.text sizeWithAttributes:@{NSFontAttributeName:self.calendar.appearance.headerTitleFont}].width;
+    _titleLabel.frame = CGRectMake(self.calendar.appearance.headerTitleLeftMargin, 0, titleWidth, titleHeight);
+    _suffixLabel.frame = CGRectMake(self.titleLabel.fs_right + 2, 0, _contentView.fs_width / 2 - _titleLabel.fs_right - 2, titleHeight);
 
     if (self.calendar.appearance.hasHeaderSubtitle) {
         _subtitleLabel.frame = CGRectMake(_contentView.fs_width / 2, 0, _contentView.fs_width / 2 - self.calendar.appearance.headerSubtitleRightMargin, titleHeight);
@@ -117,6 +127,10 @@
 //    _titleLabel.textAlignment = self.calendar.appearance.headerTitleAlignment;
     _titleLabel.textAlignment = NSTextAlignmentLeft;
 
+    _suffixLabel.font = self.calendar.appearance.headerTitleSuffixFont;
+    _suffixLabel.textColor = self.calendar.appearance.headerTitleSuffixColor;
+    _suffixLabel.textAlignment = NSTextAlignmentLeft;
+
     _subtitleLabel.font = self.calendar.appearance.headerSubtitleFont;
     _subtitleLabel.textColor = self.calendar.appearance.headerSubtitleColor;
     _subtitleLabel.textAlignment = NSTextAlignmentRight;
@@ -144,6 +158,7 @@
         text = text.capitalizedString;
     }
     self.titleLabel.text = text;
+    self.suffixLabel.text = self.calendar.appearance.headerSuffixString;
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = self.calendar.appearance.headerSubDateFormat;

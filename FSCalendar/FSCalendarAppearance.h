@@ -63,6 +63,7 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
  * The font of the month text.
  */
 @property (strong, nonatomic) UIFont   *headerTitleFont;
+@property (strong, nonatomic) UIFont   *headerTitleSuffixFont;
 @property (strong, nonatomic) UIFont   *headerSubtitleFont;
 
 /**
@@ -110,6 +111,7 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
  * The color of month header text.
  */
 @property (strong, nonatomic) UIColor  *headerTitleColor;
+@property (strong, nonatomic) UIColor  *headerTitleSuffixColor;
 @property (strong, nonatomic) UIColor  *headerSubtitleColor;
 
 /**
@@ -121,6 +123,7 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
  * The date format of the month header.
  */
 @property (strong, nonatomic) NSString *headerDateFormat;
+@property (strong, nonatomic) NSString *headerSuffixString;
 @property (strong, nonatomic) NSString *headerSubDateFormat;
 
 ///**
@@ -232,6 +235,7 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
 @property (assign, nonatomic) CGFloat headerSubtitleRightMargin;
 
 @property (assign, nonatomic) BOOL      hasHeaderSubtitle;
+@property (assign, nonatomic) BOOL      scrollWhenSelected;
 
 #if TARGET_INTERFACE_BUILDER
 
