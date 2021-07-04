@@ -63,6 +63,7 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
  * The font of the month text.
  */
 @property (strong, nonatomic) UIFont   *headerTitleFont;
+@property (strong, nonatomic) UIFont   *headerSubtitleFont;
 
 /**
  * The offset of the month header from default position.
@@ -103,11 +104,13 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
  * The color of weekday text.
  */
 @property (strong, nonatomic) UIColor  *weekdayTextColor;
+@property (strong, nonatomic) UIColor  *weekdayWeekendTextColor;
 
 /**
  * The color of month header text.
  */
 @property (strong, nonatomic) UIColor  *headerTitleColor;
+@property (strong, nonatomic) UIColor  *headerSubtitleColor;
 
 /**
  * The color oh month header separator
@@ -118,11 +121,12 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
  * The date format of the month header.
  */
 @property (strong, nonatomic) NSString *headerDateFormat;
+@property (strong, nonatomic) NSString *headerSubDateFormat;
 
-/**
- * The text alignment of the month header.
- */
-@property (assign, nonatomic) NSTextAlignment headerTitleAlignment;
+///**
+// * The text alignment of the month header.
+// */
+//@property (assign, nonatomic) NSTextAlignment headerTitleAlignment;
 
 /**
  * The alpha value of month label staying on the fringes.
@@ -221,6 +225,13 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
  *
  */
 @property (assign, nonatomic) FSCalendarSeparators separators;
+
+@property (assign, nonatomic) CGFloat weekdayBottomMargin;
+
+@property (assign, nonatomic) CGFloat headerTitleLeftMargin;
+@property (assign, nonatomic) CGFloat headerSubtitleRightMargin;
+
+@property (assign, nonatomic) BOOL      hasHeaderSubtitle;
 
 #if TARGET_INTERFACE_BUILDER
 

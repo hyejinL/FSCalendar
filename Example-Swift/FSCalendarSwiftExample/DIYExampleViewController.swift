@@ -33,16 +33,28 @@ class DIYExampleViewController: UIViewController, FSCalendarDataSource, FSCalend
         calendar.dataSource = self
         calendar.delegate = self
         calendar.allowsMultipleSelection = true
+        calendar.pagingEnabled = false
         view.addSubview(calendar)
         self.calendar = calendar
-        
+
         calendar.calendarHeaderView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.1)
         calendar.calendarWeekdayView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.1)
+        calendar.appearance.weekdayWeekendTextColor = .red
         calendar.appearance.eventSelectionColor = UIColor.white
         calendar.appearance.eventOffset = CGPoint(x: 0, y: -7)
+        calendar.appearance.hasHeaderSubtitle = true
+        if #available(iOS 8.2, *) {
+            calendar.appearance.headerTitleFont = .systemFont(ofSize: 23.0, weight: .bold)
+        }
+        calendar.appearance.headerSubtitleFont = .systemFont(ofSize: 12.0)
+        calendar.appearance.headerTitleColor = UIColor(red: 124/255, green: 137/255, blue: 173/255, alpha: 1.0)
+        calendar.appearance.headerSubtitleColor = UIColor(red: 124/255, green: 137/255, blue: 173/255, alpha: 1.0)
         calendar.today = nil // Hide the today circle
         calendar.register(DIYCalendarCell.self, forCellReuseIdentifier: "cell")
 //        calendar.clipsToBounds = true // Remove top/bottom line
+
+        calendar.headerHeight = 32
+        calendar.weekdayHeight = 69
         
         calendar.swipeToChooseGesture.isEnabled = true // Swipe-To-Choose
         

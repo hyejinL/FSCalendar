@@ -29,18 +29,31 @@
     if (self) {
         
         UIView *view;
-        UILabel *label;
-        
         view = [[UIView alloc] initWithFrame:CGRectZero];
         view.backgroundColor = [UIColor clearColor];
         [self addSubview:view];
         self.contentView = view;
-        
-        label = [[UILabel alloc] initWithFrame:CGRectZero];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.numberOfLines = 0;
-        [_contentView addSubview:label];
-        self.titleLabel = label;
+
+        UIView *titleView;
+        UILabel *titleLabel;
+        UILabel *subtitleLabel;
+
+        titleView = [[UIView alloc] initWithFrame:CGRectZero];
+        titleView.backgroundColor = [UIColor clearColor];
+        [_contentView addSubview:titleView];
+        self.titleView = titleView;
+
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.numberOfLines = 0;
+        [titleView addSubview:titleLabel];
+        self.titleLabel = titleLabel;
+
+        subtitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        subtitleLabel.textAlignment = NSTextAlignmentCenter;
+        subtitleLabel.numberOfLines = 0;
+        [titleView addSubview:subtitleLabel];
+        self.subtitleLabel = subtitleLabel;
         
         view = [[UIView alloc] initWithFrame:CGRectZero];
         view.backgroundColor = FSCalendarStandardLineColor;
@@ -59,22 +72,27 @@
     [super layoutSubviews];
     
     _contentView.frame = self.bounds;
-    
+
     CGFloat weekdayHeight = _calendar.preferredWeekdayHeight;
-    CGFloat weekdayMargin = weekdayHeight * 0.1;
-    CGFloat titleWidth = _contentView.fs_width;
+    CGFloat weekdayMargin = self.calendar.appearance.weekdayBottomMargin;
     
     self.weekdayView.frame = CGRectMake(0, _contentView.fs_height-weekdayHeight-weekdayMargin, self.contentView.fs_width, weekdayHeight);
+
+    CGFloat titleHeight = [@"1" sizeWithAttributes:@{NSFontAttributeName:self.calendar.appearance.headerTitleFont}].height;
+    CGFloat subtitleHeight = [@"1" sizeWithAttributes:@{NSFontAttributeName:self.calendar.appearance.headerSubtitleFont}].height;
+    titleHeight = MAX(titleHeight, subtitleHeight);
     
-    CGFloat titleHeight = [@"1" sizeWithAttributes:@{NSFontAttributeName:self.calendar.appearance.headerTitleFont}].height*1.5 + weekdayMargin*3;
-    
-    _bottomBorder.frame = CGRectMake(0, _contentView.fs_height-weekdayHeight-weekdayMargin*2, _contentView.fs_width, 1.0);
+    _bottomBorder.frame = CGRectMake(0, _contentView.fs_height-weekdayMargin, _contentView.fs_width, 1.0);
 
     CGPoint titleHeaderOffset = self.calendar.appearance.headerTitleOffset;
-    _titleLabel.frame = CGRectMake(titleHeaderOffset.x,
-                                   titleHeaderOffset.y+_bottomBorder.fs_bottom-titleHeight-weekdayMargin,
-                                   titleWidth,
-                                   titleHeight);
+    _titleView.frame = CGRectMake(titleHeaderOffset.x, titleHeaderOffset.y+(_contentView.fs_height / 2)-(titleHeight / 2)-(weekdayHeight / 2), _contentView.fs_width, titleHeight);
+    _titleLabel.frame = CGRectMake(self.calendar.appearance.headerTitleLeftMargin, 0, _contentView.fs_width / 2 - self.calendar.appearance.headerTitleLeftMargin, titleHeight);
+
+    if (self.calendar.appearance.hasHeaderSubtitle) {
+        _subtitleLabel.frame = CGRectMake(_contentView.fs_width / 2, 0, _contentView.fs_width / 2 - self.calendar.appearance.headerSubtitleRightMargin, titleHeight);
+    } else {
+        _subtitleLabel.frame = CGRectMake(0, 0, 0, 0);
+    }
 }
 
 #pragma mark - Properties
@@ -94,7 +112,13 @@
 {
     _titleLabel.font = self.calendar.appearance.headerTitleFont;
     _titleLabel.textColor = self.calendar.appearance.headerTitleColor;
-    _titleLabel.textAlignment = self.calendar.appearance.headerTitleAlignment;
+//    _titleLabel.textAlignment = self.calendar.appearance.headerTitleAlignment;
+    _titleLabel.textAlignment = NSTextAlignmentLeft;
+
+    _subtitleLabel.font = self.calendar.appearance.headerSubtitleFont;
+    _subtitleLabel.textColor = self.calendar.appearance.headerSubtitleColor;
+    _subtitleLabel.textAlignment = NSTextAlignmentRight;
+
     _bottomBorder.backgroundColor = self.calendar.appearance.headerSeparatorColor;
     [self.weekdayView configureAppearance];
 }
@@ -112,8 +136,12 @@
     } else if (usesCapitalized) {
         text = text.capitalizedString;
     }
-
     self.titleLabel.text = text;
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = self.calendar.appearance.headerSubDateFormat;
+    NSString *subtext = [formatter stringFromDate:month];
+    self.subtitleLabel.text = subtext;
 }
 
 @end

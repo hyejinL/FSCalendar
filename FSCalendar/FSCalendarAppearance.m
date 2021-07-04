@@ -29,20 +29,30 @@
 {
     self = [super init];
     if (self) {
-        
+        _hasHeaderSubtitle = NO;
+
         _titleFont = [UIFont systemFontOfSize:FSCalendarStandardTitleTextSize];
         _subtitleFont = [UIFont systemFontOfSize:FSCalendarStandardSubtitleTextSize];
         _weekdayFont = [UIFont systemFontOfSize:FSCalendarStandardWeekdayTextSize];
         _headerTitleFont = [UIFont systemFontOfSize:FSCalendarStandardHeaderTextSize];
+        _headerSubtitleFont = [UIFont systemFontOfSize:FSCalendarStandardHeaderSubTextSize];
         
         _headerTitleColor = FSCalendarStandardTitleTextColor;
         _headerSeparatorColor = FSCalendarStandardLineColor;
-        _headerDateFormat = @"MMMM yyyy";
+        _headerDateFormat = @"MMMM";
         _headerMinimumDissolvedAlpha = 0.2;
         _headerTitleOffset = CGPointZero;
-        _headerTitleAlignment = NSTextAlignmentCenter;
+//        _headerTitleAlignment = NSTextAlignmentCenter;
         _weekdayTextColor = FSCalendarStandardTitleTextColor;
+        _weekdayWeekendTextColor = FSCalendarStandardTitleTextColor;
         _caseOptions = FSCalendarCaseOptionsHeaderUsesDefaultCase|FSCalendarCaseOptionsWeekdayUsesDefaultCase;
+
+        _headerSubtitleColor = FSCalendarStandardTitleTextColor;
+        _headerSubDateFormat = @"yyyy";
+
+        _weekdayBottomMargin = 0;
+        _headerTitleLeftMargin = 20;
+        _headerSubtitleRightMargin = 20;
         
         _backgroundColors = [NSMutableDictionary dictionaryWithCapacity:5];
         _backgroundColors[@(FSCalendarCellStateNormal)]      = [UIColor clearColor];
@@ -110,6 +120,14 @@
 {
     if (![_headerTitleFont isEqual:headerTitleFont]) {
         _headerTitleFont = headerTitleFont;
+        [self.calendar configureAppearance];
+    }
+}
+
+- (void)setHeaderSubtitleFont:(UIFont *)headerSubtitleFont
+{
+    if (![_headerSubtitleFont isEqual:headerSubtitleFont]) {
+        _headerSubtitleFont = headerSubtitleFont;
         [self.calendar configureAppearance];
     }
 }
@@ -404,10 +422,26 @@
     }
 }
 
+- (void)setWeekdayWeekendTextColor:(UIColor *)weekdayWeekendTextColor
+{
+    if (![_weekdayWeekendTextColor isEqual:weekdayWeekendTextColor]) {
+        _weekdayWeekendTextColor = weekdayWeekendTextColor;
+        [self.calendar configureAppearance];
+    }
+}
+
 - (void)setHeaderTitleColor:(UIColor *)color
 {
     if (![_headerTitleColor isEqual:color]) {
         _headerTitleColor = color;
+        [self.calendar configureAppearance];
+    }
+}
+
+- (void)setHeaderSubtitleColor:(UIColor *)color
+{
+    if (![_headerSubtitleColor isEqual:color]) {
+        _headerSubtitleColor = color;
         [self.calendar configureAppearance];
     }
 }
@@ -436,13 +470,21 @@
     }
 }
 
-- (void)setHeaderTitleAlignment:(NSTextAlignment)headerTitleAlignment
+- (void)setHeaderSubDateFormat:(NSString *)headerSubDateFormat
 {
-    if (_headerTitleAlignment != headerTitleAlignment) {
-        _headerTitleAlignment = headerTitleAlignment;
+    if (![_headerSubDateFormat isEqual:headerSubDateFormat]) {
+        _headerSubDateFormat = headerSubDateFormat;
         [self.calendar configureAppearance];
     }
 }
+
+//- (void)setHeaderTitleAlignment:(NSTextAlignment)headerTitleAlignment
+//{
+//    if (_headerTitleAlignment != headerTitleAlignment) {
+//        _headerTitleAlignment = headerTitleAlignment;
+//        [self.calendar configureAppearance];
+//    }
+//}
 
 - (void)setCaseOptions:(FSCalendarCaseOptions)caseOptions
 {
